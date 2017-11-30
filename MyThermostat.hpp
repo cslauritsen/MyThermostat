@@ -6,9 +6,9 @@ enum Weekdays { SUN, MON, TUE, WED, THU, FRI, SAT };
 enum Minutes { ZERO, QUARTER_PAST, HALF_PAST, QUARTER_TILL };
 enum SprType { HEAT, COOL };
 /** value to add to temp F setpoints */
-const int spr_offset = 58; 
+const int spr_offset = 58;
 #pragma pack(push, 1)
-class SetPointRecord 
+class SetPointRecord
 {
 public:
 	unsigned int heatcool		:1;
@@ -16,10 +16,7 @@ public:
 	unsigned int setpoint		:5;
 	unsigned int hr 		:5;
 	unsigned int min 		:2;
-
-	void save();
 };
-
 
 class Thermostat {
 	public:
