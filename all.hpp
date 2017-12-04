@@ -1,13 +1,13 @@
-#include "MyThermostat.h"
+#include "MyThermostat.hpp"
 
 #if defined(__APPLE__) || defined(__linux)
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <ostream>
 
 #endif
 
 #if defined(__linux)
-#include <string.h>
 #include <stdint.h>
+#include <string.h>
 #endif
