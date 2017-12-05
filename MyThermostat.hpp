@@ -16,14 +16,24 @@ class SetPointRecord {
 private:
   Weekday weekday : 3;
   unsigned int setpoint : 5;
-
+  unsigned int enabled  :1; // whether to ignore or use this record
   Mode mode : 2;
   Units units : 1;
   unsigned int hr : 5;
 
   Minute min : 2;
+  unsigned int _reserved :4;
 
 public:
+  SetPointRecord() {
+    enabled = 0;
+    mode=HEAT;
+    setpoint = setpointMin;
+    units = FAHRENHEIT;
+    hr = 6;
+    min = ZERO;
+  }
+
   inline Units getUnits() { return units; }
   inline void setUnits(Units x) { units = x; }
 
@@ -50,12 +60,16 @@ public:
   inline Weekday getWeekday() { return weekday; }
   inline void setWeekday(Weekday x) { weekday = x; }
   void setWeekday(int x);
+  const char * getWeekdayAsString();
 
   void incrWeekday();
   void decrWeekday();
 
   void incrMinute();
   void decrMinute();
+
+  bool isEnabled() { return 1==enabled; }
+  void setEnabled(bool x) { enabled = x ? 1 : 0; }
 
   inline float toCelsius(float f) {
     f -= 32.0;
@@ -80,10 +94,17 @@ public:
 
 class Thermostat {
 public:
-  static const int maxSchedules = 35;
-  SetPointRecord schedule[maxSchedules]; // Allows 5 transitions per day
+  static const int maxSetpoints = 35;
+  SetPointRecord setpoints[maxSetpoints]; // Allows 5 transitions per day
   void save();
   void copyToAll(SetPointRecord *model);
+  Thermostat() {
+    for (int i=0; i < maxSetpoints; i++) {
+      setpoints[i] = SetPointRecord();
+      setpoints[i].setWeekday(i/5 + 1);
+    }
+  }
+  ~Thermostat() {   }
 };
 
 } // namespace MyThermostat

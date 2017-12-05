@@ -28,6 +28,40 @@ const char * SetPointRecord::getModeAsString() {
   return (const char *) cbuf;
 }
 
+const char * SetPointRecord::getWeekdayAsString() {
+  static char cbuf[4];
+  memset(cbuf, 0, sizeof(cbuf));
+  switch (weekday) {
+  case ANY:
+    strcpy(cbuf, "ANY");
+    break;
+  case SUN:
+    strcpy(cbuf, "SUN");
+    break;
+  case MON:
+    strcpy(cbuf, "MON");
+    break;
+  case TUE:
+    strcpy(cbuf, "TUE");
+    break;
+  case WED:
+    strcpy(cbuf, "WED");
+    break;
+  case THU:
+    strcpy(cbuf, "THU");
+    break;
+  case FRI:
+    strcpy(cbuf, "FRI");
+    break;
+  case SAT:
+    strcpy(cbuf, "SAT");
+    break;
+  default:
+    break;
+  }
+  return (const char *) cbuf;
+}
+
 void SetPointRecord::setMinutes(int x) {
   switch (x) {
   case 0:

@@ -3,12 +3,14 @@ using namespace std;
 namespace MyThermostat {
 
 void Thermostat::save() {
-  uint8_t *bytes = (uint8_t *)this->schedule;
+  // Reinterpret the data fields in the class as an array of bytes
+  // that can be persisted, one byte at a time
+  uint8_t *bytes = reinterpret_cast< uint8_t* >(this->setpoints);
 #ifndef ARDUINO
-  std::cout << "sizeof(this.schedule)" << sizeof(this->schedule) << std::endl;
+  std::cout << "sizeof(this.schedule)" << sizeof(this->setpoints) << std::endl;
   ofstream f;
   f.open("sched.out", ios::out | ios::binary);
-  for (int i = 0; i < sizeof(this->schedule); i++) {
+  for (int i = 0; i < sizeof(this->setpoints); i++) {
     f << *bytes;
     bytes++;
   }
@@ -17,8 +19,8 @@ void Thermostat::save() {
 }
 
 void Thermostat::copyToAll(SetPointRecord *model) {
-  for (int t = 0; t < Thermostat::maxSchedules; t++) {
-    SetPointRecord *pSpr = &this->schedule[t];
+  for (int t = 0; t < Thermostat::maxSetpoints; t++) {
+    SetPointRecord *pSpr = &this->setpoints[t];
     memcpy(pSpr, model, sizeof(SetPointRecord));
     pSpr->setWeekday(FRI);
   }
