@@ -3,6 +3,7 @@
 using namespace MyThermostat;
 using namespace std;
 int main(int argc, char** argv) {
+	#ifndef ARDUINO
 
 	SetPointRecord model;
 	memset(&model, 0, sizeof(model));
@@ -56,4 +57,6 @@ int main(int argc, char** argv) {
 	cout << "Saved." << endl;
 
 	cout << "Done." << endl;
+	#endif
+	return 0;
 }

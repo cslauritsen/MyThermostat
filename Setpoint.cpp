@@ -3,33 +3,29 @@ using namespace std;
 namespace MyThermostat {
 
 void SetPointRecord::incrMode() {
-  if (isOff()) {
-    setMode(HEAT);
-  }
-  else if (HEAT == mode) {
-    setMode(COOL);
-  }
-  else {
-    setOff();
-  }
+  mode = static_cast<Mode>((static_cast<int>(mode) + 1) % modeCount);
 }
-string SetPointRecord::getModeAsString() {
-  std::string ret("?");
-  if (isOff()) {
-    ret = "OFF";
-  } else {
-    switch (mode) {
-    case HEAT:
-      ret = "HEAT";
-      break;
-    case COOL:
-      ret = "COOL";
-      break;
-    default:
-      break;
-    }
+
+const char * SetPointRecord::getModeAsString() {
+  static char cbuf[5];
+  memset(cbuf, 0, sizeof(cbuf));
+  switch (mode) {
+  case OFF:
+    strcpy(cbuf, "OFF");
+    break;
+  case HEAT:
+    strcpy(cbuf, "HEAT");
+    break;
+  case COOL:
+    strcpy(cbuf, "COOL");
+    break;
+  case AUTO:
+    strcpy(cbuf, "AUTO");
+    break;
+  default:
+    break;
   }
-  return ret;
+  return (const char *) cbuf;
 }
 
 void SetPointRecord::setMinutes(int x) {
@@ -48,6 +44,7 @@ void SetPointRecord::setMinutes(int x) {
     break;
   }
 }
+
 void SetPointRecord::setWeekday(int x) {
   switch (x) {
   case 0:
@@ -80,12 +77,12 @@ void SetPointRecord::setWeekday(int x) {
 }
 
 void SetPointRecord::incrSetPoint() {
-  if (setpoint < setpointMax) {
+  if (OFF != mode) {
     setpoint++;
   }
 }
 void SetPointRecord::decrSetPoint() {
-  if (setpoint > setpointMin) {
+  if (OFF != mode) {
     setpoint--;
   }
 }

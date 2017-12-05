@@ -7,7 +7,7 @@
 
 #endif
 
-#if defined(__linux)
+#if defined(__linux) || defined(ARDUINO)
 #include <stdint.h>
 #include <string.h>
 #endif
