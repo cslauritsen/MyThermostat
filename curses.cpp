@@ -18,6 +18,7 @@ const char *choices[] = {
 int main() {
   int spos = 0;
   Thermostat t;
+  t.load();
   SetPointRecord *sr = &t.setpoints[spos];
   int ch;
 #ifndef ARDUINO
@@ -26,6 +27,7 @@ int main() {
   keypad(stdscr, TRUE); /* We get F1, F2 etc..		*/
   noecho();             /* Don't echo() while we do getch */
 
+  bool saved = false;
   for (int c = 0; c != 'q'; c = getch()) {
     move(0, 0);
     switch (c) {
@@ -46,7 +48,6 @@ int main() {
     case 's':
       spos = (spos + 1) % t.maxSetpoints;
       sr = &t.setpoints[spos];
-      sr->decrSetPoint();
       break;
     case 'w':
       sr->incrWeekday();
@@ -66,6 +67,7 @@ int main() {
       break;
     case 'S':
       t.save();
+      saved = true;
     default:
       break;
     }
@@ -82,6 +84,10 @@ int main() {
     if (OFF != sr->getMode()) {
       printw("Setpoint: %d °%c\n", sr->getSetpoint(),
              sr->getUnits() == FAHRENHEIT ? 'F' : 'C');
+    }
+    if (saved) {
+      printw("Saved.\n");
+      saved = false;
     }
     refresh(); /* Print it on to the real screen */
   }

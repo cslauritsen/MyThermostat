@@ -55,6 +55,8 @@ int main(int argc, char** argv) {
 	cout << "Copied." << endl;
 	th.save();
 	cout << "Saved." << endl;
+	th.load();
+	cout << "Loaded." << endl;
 
 	cout << "Done." << endl;
 	#endif
